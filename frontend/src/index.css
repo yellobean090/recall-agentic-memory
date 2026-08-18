@@ -1,0 +1,65 @@
+:root {
+  /* Color — near-black console, single reserved signal accent */
+  --bg: #0a0b0d;
+  --surface: #131519;
+  --surface-raised: #1b1e23;
+  --border: #24272d;
+  --border-bright: #34383f;
+  --text-primary: #edeef0;
+  --text-secondary: #8b9096;
+  --text-tertiary: #5a5f66;
+
+  --signal: #5aa9e6; /* reserved: memory recall only */
+  --signal-dim: rgba(90, 169, 230, 0.14);
+
+  --status-critical: #e5484d;
+  --status-high: #e8a33d;
+  --status-medium: #8b9096;
+  --status-resolved: #4cae7d;
+
+  /* Type */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--signal-dim);
+  color: var(--text-primary);
+}
+
+button {
+  font-family: inherit;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: agentops-memory-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: DATABASE_URL
+        sync: false
+      - key: AGENT_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: BEDROCK_MODEL_ID
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: bedrock
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        value: us-east-1
+      - key: COCKROACH_MCP_URL
+        sync: false
+      - key: COCKROACH_MCP_TOKEN
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

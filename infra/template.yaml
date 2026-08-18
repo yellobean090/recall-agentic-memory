@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: AgentOps Memory — embedding Lambda, SQS trigger, S3 log bucket
+
+Parameters:
+  DatabaseUrl:
+    Type: String
+    NoEcho: true
+    Description: CockroachDB Cloud connection string
+
+Resources:
+  IncidentLogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "agentops-memory-logs-${AWS::AccountId}"
+
+  EmbeddingQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: agentops-embedding-queue
+      VisibilityTimeout: 60
+
+  EmbedFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: dist/lambda/embed.handler
+      Runtime: nodejs20.x
+      Timeout: 30
+      MemorySize: 256
+      Environment:
+        Variables:
+          DATABASE_URL: !Ref DatabaseUrl
+          EMBEDDING_PROVIDER: bedrock
+      Policies:
+        - AmazonBedrockFullAccess
+      Events:
+        SQSTrigger:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt EmbeddingQueue.Arn
+            BatchSize: 5
+
+Outputs:
+  QueueUrl:
+    Value: !Ref EmbeddingQueue
+  BucketName:
+    Value: !Ref IncidentLogsBucket
